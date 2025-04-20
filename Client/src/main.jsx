@@ -1,8 +1,10 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import CodeBlocksList from './components/codeBlocksArea/codeBlocksList'
+import { createRoot } from "react-dom/client";
+import Routing from "./components/routing/Routing";
+import { BrowserRouter } from "react-router-dom";
+import "./index.css";
 
-createRoot(document.getElementById('root')).render(
-  <CodeBlocksList/>
-)
+createRoot(document.getElementById("root")).render(
+  <BrowserRouter>
+    <Routing />
+  </BrowserRouter>
+);
