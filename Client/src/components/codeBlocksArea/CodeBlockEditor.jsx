@@ -1,54 +1,42 @@
+import { useCodeBlockData } from "@/hooks/useCodeBlockData";
+import { useCodeBlockSocket } from "@/hooks/useCodeBlockSocket";
 import socketService from "@/services/socketService";
-import axios from "axios";
+import { javascript } from "@codemirror/lang-javascript";
+import { tokyoNight } from "@uiw/codemirror-theme-tokyo-night";
+import CodeMirror from "@uiw/react-codemirror";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import config from "../../utils/config";
-import CodeMirror from "@uiw/react-codemirror";
-import { javascript } from "@codemirror/lang-javascript";
-import { tokyoNight } from '@uiw/codemirror-theme-tokyo-night';
-
+import smileyDog from "../../assets/gifs/smileyDog.gif";
 
 const CodeBlockEditor = () => {
   const { codeBlockId } = useParams();
-  const [codeBlock, setCodeBlock] = useState();
+  const navigate = useNavigate();
+
   const [code, setCode] = useState("");
   const [role, setRole] = useState("");
   const [studentCount, setStudentCount] = useState(0);
-  const [showSmiley, setShowSmiley] = useState(false);
-
-  const navigate = useNavigate();
+  const [solved, setSolved] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
+  
+  const codeBlock = useCodeBlockData(codeBlockId);
 
   useEffect(() => {
-    const loadCodeBlockAndConnect = async () => {
-      try {
-        const response = await axios.get(config.getCodeBlocks + codeBlockId);
-        setCodeBlock(response.data);
-        setCode(response.data?.template);
+    if (codeBlock?.template) {
+      setCode(codeBlock.template);
+    }
+  }, [codeBlock]);
 
-        socketService.connect();
-
-        socketService.emit("joinCodeBlock", {
-          codeBlockId,
-          initialCode: response.data?.template,
-        });
-        socketService.on("setRole", (receivedRole) => setRole(receivedRole));
-        socketService.on("codeUpdate", (updatedCode) => setCode(updatedCode));
-        socketService.on("studentCount", (count) => setStudentCount(count));
-        socketService.on("redirectToLobby", () => {
-          alert("Mentor left. Redirecting...");
-          navigate("/");
-        });
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    loadCodeBlockAndConnect();
-
-    return () => {
-      socketService.disconnect();
-    };
-  }, [codeBlockId, navigate]);
+  useCodeBlockSocket(codeBlockId, codeBlock?.template, {
+    onRole: setRole,
+    onCode: setCode,
+    onCount: setStudentCount,
+    onSolved: setSolved,
+    onUnsolved: setSolved, 
+    onRedirect: () => {
+      alert("Mentor left. Redirecting…");
+      navigate("/");
+    },
+  });
 
   const handleCodeChange = (e) => {
     const newCode = e.target.value;
@@ -57,7 +45,20 @@ const CodeBlockEditor = () => {
     if (role === "student")
       socketService.emit("codeChange", { codeBlockId, code: newCode });
 
-    setShowSmiley(newCode.trim() === codeBlock?.solution.trim());
+    if (newCode.trim() === codeBlock?.solution.trim()) {
+      if (!solved) {
+        socketService.emit("solved", { codeBlockId });
+      }
+
+      setSolved(true);
+      setShowCelebration(true);
+      setTimeout(() => setShowCelebration(false), 5000);
+    } else {
+      if (solved) {
+        socketService.emit("unsolved", { codeBlockId });
+      }
+      setSolved(false);
+    }
   };
 
   return (
@@ -81,11 +82,23 @@ const CodeBlockEditor = () => {
       <p className="text-sm text-muted-foreground mb-3 ml-[13%]">
         {codeBlock?.description}
       </p>
-      {showSmiley && <div>:)</div>}
+      {showCelebration && role === "student" && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center z-50">
+          <img src={smileyDog} alt="Success!" className="w-[180px]" />
+          <p className="text-2xl mt-4 text-white">You did it!</p>
+        </div>
+      )}
+
+      {solved && (
+        <p className="absolute top-4 left-1/2 -translate-x-1/2 text-lg font-semibold text-green-600">
+          Solved!
+        </p>
+      )}
+
       <CodeMirror
         value={code}
         height="400px"
-        theme={tokyoNight} 
+        theme={tokyoNight}
         extensions={[javascript()]}
         onChange={(value) => handleCodeChange({ target: { value } })}
         readOnly={role === "mentor"}
