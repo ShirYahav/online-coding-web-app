@@ -6,6 +6,7 @@ import { tokyoNight } from "@uiw/codemirror-theme-tokyo-night";
 import CodeMirror from "@uiw/react-codemirror";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
 import smileyDog from "../../assets/gifs/smileyDog.gif";
 
 const CodeBlockEditor = () => {
@@ -33,7 +34,7 @@ const CodeBlockEditor = () => {
     onSolved: setSolved,
     onUnsolved: setSolved,
     onRedirect: () => {
-      alert("Mentor left. Redirecting…");
+      toast("Mentor left, Redirecting back to Lobby ...");
       navigate("/");
     },
   });
@@ -107,7 +108,7 @@ const CodeBlockEditor = () => {
         extensions={[javascript()]}
         onChange={(value) => handleCodeChange({ target: { value } })}
         readOnly={role === "mentor"}
-        className="w-[74%] mx-auto rounded-md"
+        className="w-[74%] mx-auto rounded-md text-base"
       />
       <p className="text-sm text-muted-foreground mt-2 ml-[13%]">
         Students in session: {studentCount}

@@ -23,7 +23,7 @@ const CodeBlockCard = (props) => {
   return (
     <Card className="w-[100%] mx-auto cursor-pointer" onClick={handleClick}>
       <CardHeader className="h-[20%]">
-        <CardTitle>{title}</CardTitle>
+        <CardTitle className="text-lg">{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent className="h-[80%] flex flex-col justify-end mt-6">
