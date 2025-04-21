@@ -1,13 +1,14 @@
 class DevelopmentConfig {
-    rootUrl = "http://localhost:3001/";
-    getCodeBlocks = "http://localhost:3001/api/codeblocks/";
+    rootUrl = import.meta.env.VITE_API_ROOT;
+    getCodeBlocks = import.meta.env.VITE_API_ROOT + "api/codeblocks/";
 }
 
 class ProductionConfig {
-    // Production-specific configuration
+    rootUrl = import.meta.env.VITE_API_ROOT;
+    getCodeBlocks = import.meta.env.VITE_API_ROOT + "api/codeblocks/";
 }
 
-const config = process.env.NODE_ENV === "development"
+const config = import.meta.env.MODE === "development"
     ? new DevelopmentConfig()
     : new ProductionConfig();
 
