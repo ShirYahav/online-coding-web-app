@@ -15,7 +15,7 @@ app.use(cors({ origin: '*' }));
 app.use(express.json());
 app.use("/api" ,codeBlockController);
 
-const port = 3001;
+const port = process.env.PORT || 3001;
 
 setupSocket(server);
 
