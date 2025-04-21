@@ -1,18 +1,22 @@
-import express from 'express';
 import cors from "cors";
-import dal from "./dal/dal.js";
+import express from 'express';
+import http from "http";
 import codeBlockController from './controller/codeblock_controller.js';
+import dal from "./dal/dal.js";
+import setupSocket from "./logic/socket_logic.js";
 
-const port = 3001;
 
 dal.connect();
 
 const app = express();
-
+const server = http.createServer(app);
 
 app.use(cors({ origin: '*' }));
 app.use(express.json());
 app.use("/api" ,codeBlockController);
 
+const port = 3001;
 
-app.listen(port, () => console.log(`listening on port ${port}...`));
+setupSocket(server);
+
+server.listen(port, () => console.log(`listening (HTTP + WebSocket) on ${port}…`));

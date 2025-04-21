@@ -1,5 +1,6 @@
 class DevelopmentConfig {
-    getCodeBlocks = "http://localhost:3001/api/codeblocks/"
+    rootUrl = "http://localhost:3001/";
+    getCodeBlocks = "http://localhost:3001/api/codeblocks/";
 }
 
 class ProductionConfig {
