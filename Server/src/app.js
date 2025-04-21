@@ -1,10 +1,12 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import cors from "cors";
 import express from 'express';
 import http from "http";
 import codeBlockController from './controller/codeblock_controller.js';
 import dal from "./dal/dal.js";
 import setupSocket from "./logic/socket_logic.js";
-
 
 dal.connect();
 
