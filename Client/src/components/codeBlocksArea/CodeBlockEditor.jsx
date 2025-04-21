@@ -17,7 +17,7 @@ const CodeBlockEditor = () => {
   const [studentCount, setStudentCount] = useState(0);
   const [solved, setSolved] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
-  
+
   const codeBlock = useCodeBlockData(codeBlockId);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const CodeBlockEditor = () => {
     onCode: setCode,
     onCount: setStudentCount,
     onSolved: setSolved,
-    onUnsolved: setSolved, 
+    onUnsolved: setSolved,
     onRedirect: () => {
       alert("Mentor left. Redirecting…");
       navigate("/");
@@ -69,11 +69,13 @@ const CodeBlockEditor = () => {
       >
         ← Back
       </Link>
-      {role === "mentor" && (
+
+      {(role === "mentor" || role === "student") && (
         <p className="absolute top-4 right-6 text-sm text-muted-foreground">
-          Hi Tom!
+          {role === "mentor" ? "Hi Tom!" : "Hi Student!"}
         </p>
       )}
+      
       <h1 className="text-3xl text-center font-bold p-15">
         {codeBlock?.title}
       </h1>
@@ -89,7 +91,11 @@ const CodeBlockEditor = () => {
 
       {showCelebration && role === "student" && (
         <div className="absolute inset-0 flex flex-col items-center justify-center z-50">
-          <img src={smileyDog} alt="Success!" className="w-[205px] h-[205px] rounded-full object-cover object-[50%_25%]" />
+          <img
+            src={smileyDog}
+            alt="Success!"
+            className="w-[205px] h-[205px] rounded-full object-cover object-[50%_25%]"
+          />
           <p className="text-1xl mt-4 text-white">You did it!</p>
         </div>
       )}
@@ -103,7 +109,9 @@ const CodeBlockEditor = () => {
         readOnly={role === "mentor"}
         className="w-[74%] mx-auto rounded-md"
       />
-      <p className="text-sm text-muted-foreground mt-2 ml-[13%]">Students in session: {studentCount}</p>
+      <p className="text-sm text-muted-foreground mt-2 ml-[13%]">
+        Students in session: {studentCount}
+      </p>
     </>
   );
 };
