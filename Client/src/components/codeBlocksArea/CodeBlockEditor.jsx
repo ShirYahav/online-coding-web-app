@@ -69,30 +69,29 @@ const CodeBlockEditor = () => {
       >
         ← Back
       </Link>
-
       {role === "mentor" && (
         <p className="absolute top-4 right-6 text-sm text-muted-foreground">
           Hi Tom!
         </p>
       )}
-
       <h1 className="text-3xl text-center font-bold p-15">
         {codeBlock?.title}
       </h1>
-      <p className="text-sm text-muted-foreground mb-3 ml-[13%]">
+      <p className="text-sm text-muted-foreground mb-2 ml-[13%]">
         {codeBlock?.description}
       </p>
-      {showCelebration && role === "student" && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center z-50">
-          <img src={smileyDog} alt="Success!" className="w-[180px]" />
-          <p className="text-2xl mt-4 text-white">You did it!</p>
-        </div>
-      )}
 
       {solved && (
-        <p className="absolute top-4 left-1/2 -translate-x-1/2 text-lg font-semibold text-green-600">
+        <p className="ml-[13%] mb-2 mt-[-7px] text-lg font-semibold text-[#bb9af7]">
           Solved!
         </p>
+      )}
+
+      {showCelebration && role === "student" && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center z-50">
+          <img src={smileyDog} alt="Success!" className="w-[205px] h-[205px] rounded-full object-cover object-[50%_25%]" />
+          <p className="text-1xl mt-4 text-white">You did it!</p>
+        </div>
       )}
 
       <CodeMirror
@@ -104,7 +103,7 @@ const CodeBlockEditor = () => {
         readOnly={role === "mentor"}
         className="w-[74%] mx-auto rounded-md"
       />
-      <p className="mt-2 ml-[13%]">Students in session: {studentCount}</p>
+      <p className="text-sm text-muted-foreground mt-2 ml-[13%]">Students in session: {studentCount}</p>
     </>
   );
 };
