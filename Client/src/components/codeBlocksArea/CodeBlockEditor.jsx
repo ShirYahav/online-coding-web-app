@@ -1,9 +1,12 @@
-import { Textarea } from "@/components/ui/textarea";
+import socketService from "@/services/socketService";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import config from "../../utils/config";
-import socketService from "@/services/socketService";
+import CodeMirror from "@uiw/react-codemirror";
+import { javascript } from "@codemirror/lang-javascript";
+import { tokyoNight } from '@uiw/codemirror-theme-tokyo-night';
+
 
 const CodeBlockEditor = () => {
   const { codeBlockId } = useParams();
@@ -11,6 +14,7 @@ const CodeBlockEditor = () => {
   const [code, setCode] = useState("");
   const [role, setRole] = useState("");
   const [studentCount, setStudentCount] = useState(0);
+  const [showSmiley, setShowSmiley] = useState(false);
 
   const navigate = useNavigate();
 
@@ -19,13 +23,13 @@ const CodeBlockEditor = () => {
       try {
         const response = await axios.get(config.getCodeBlocks + codeBlockId);
         setCodeBlock(response.data);
-        setCode(response.data.template);
+        setCode(response.data?.template);
 
         socketService.connect();
 
         socketService.emit("joinCodeBlock", {
           codeBlockId,
-          initialCode: response.data.template,
+          initialCode: response.data?.template,
         });
         socketService.on("setRole", (receivedRole) => setRole(receivedRole));
         socketService.on("codeUpdate", (updatedCode) => setCode(updatedCode));
@@ -50,9 +54,10 @@ const CodeBlockEditor = () => {
     const newCode = e.target.value;
     setCode(newCode);
 
-    if (role === "student") {
+    if (role === "student")
       socketService.emit("codeChange", { codeBlockId, code: newCode });
-    }
+
+    setShowSmiley(newCode.trim() === codeBlock?.solution.trim());
   };
 
   return (
@@ -69,18 +74,22 @@ const CodeBlockEditor = () => {
           Hi Tom!
         </p>
       )}
-      
+
       <h1 className="text-3xl text-center font-bold p-15">
         {codeBlock?.title}
       </h1>
       <p className="text-sm text-muted-foreground mb-3 ml-[13%]">
         {codeBlock?.description}
       </p>
-      <Textarea
+      {showSmiley && <div>:)</div>}
+      <CodeMirror
         value={code}
-        onChange={handleCodeChange}
+        height="400px"
+        theme={tokyoNight} 
+        extensions={[javascript()]}
+        onChange={(value) => handleCodeChange({ target: { value } })}
         readOnly={role === "mentor"}
-        className="w-[74%] h-[400px] bg-muted mx-auto rounded-md p-5"
+        className="w-[74%] mx-auto rounded-md"
       />
       <p className="mt-2 ml-[13%]">Students in session: {studentCount}</p>
     </>
