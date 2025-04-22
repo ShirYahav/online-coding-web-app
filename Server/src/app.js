@@ -11,6 +11,11 @@ import setupSocket from "./logic/socket_logic.js";
 dal.connect();
 
 const app = express();
+
+app.get("/", (req, res) => {
+  res.status(200).send("OK");
+});
+
 const server = http.createServer(app);
 
 const allowedOrigins = [
