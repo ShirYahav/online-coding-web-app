@@ -129,7 +129,7 @@ const CodeBlockEditor = () => {
           <Button
             onClick={requestNextHint}
             disabled={role !== "student" || hints.length >= totalHints}
-            className="w-full mb-4 bg-[#1f2335] rounded-sm text-sm cursor-pointer"
+            className="w-full mb-4 bg-[#1f2335] rounded-sm text-sm text-white cursor-pointer"
           >
             Get Hint
           </Button>

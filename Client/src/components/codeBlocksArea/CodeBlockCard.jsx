@@ -28,7 +28,7 @@ const CodeBlockCard = (props) => {
       </CardHeader>
       <CardContent className="h-[80%] flex flex-col justify-end mt-6">
         <p className="text-sm text-muted-foreground mb-2">Preview:</p>
-        <pre className="bg-muted p-4 rounded-md overflow-x-auto">
+        <pre className="bg-gray-100 dark:bg-gray-800 p-4 rounded-md overflow-x-auto">
           <code
             dangerouslySetInnerHTML={{
               __html: hljs.highlight(template, { language: "javascript" })
