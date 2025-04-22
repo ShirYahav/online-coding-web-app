@@ -1,0 +1,177 @@
+[{
+  "_id": {
+    "$oid": "68079e5a09369d07a2c66df9"
+  },
+  "title": "Filter Even Numbers",
+  "description": "Return a new array with only the even numbers from the input array.",
+  "template": "function filterEven(arr) {\n  // your code here\n}",
+  "solution": "function filterEven(arr) {\n  return arr.filter(num => num % 2 === 0);\n}",
+  "hints": [
+    {
+      "order": 1,
+      "text": "Use the Array.filter method"
+    },
+    {
+      "order": 2,
+      "text": "Check if num % 2 === 0"
+    }
+  ],
+  "tests": [
+    {
+      "name": "[1,2,3,4]",
+      "args": [
+        [
+          1,
+          2,
+          3,
+          4
+        ]
+      ],
+      "expected": [
+        2,
+        4
+      ]
+    },
+    {
+      "name": "[5,7,9]",
+      "args": [
+        [
+          5,
+          7,
+          9
+        ]
+      ],
+      "expected": []
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "68079e5a09369d07a2c66dfa"
+  },
+  "title": "Double Positives",
+  "description": "Return a new array where only the positive numbers are doubled.",
+  "template": "function doublePositives(arr) {\n  // your code here\n}",
+  "solution": "function doublePositives(arr) {\n  return arr.map(n => n > 0 ? n * 2 : n);\n}",
+  "hints": [
+    {
+      "order": 1,
+      "text": "Use Array.map"
+    },
+    {
+      "order": 2,
+      "text": "Use a ternary to double only positives"
+    }
+  ],
+  "tests": [
+    {
+      "name": "[1, -2, 3]",
+      "args": [
+        [
+          1,
+          -2,
+          3
+        ]
+      ],
+      "expected": [
+        2,
+        -2,
+        6
+      ]
+    },
+    {
+      "name": "[-1, -2, -3]",
+      "args": [
+        [
+          -1,
+          -2,
+          -3
+        ]
+      ],
+      "expected": [
+        -1,
+        -2,
+        -3
+      ]
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "68079e5a09369d07a2c66dfb"
+  },
+  "title": "Is Palindrome",
+  "description": "Return true if the string is a palindrome (same forward and backward).",
+  "template": "function isPalindrome(str) {\n  // your code here\n}",
+  "solution": "function isPalindrome(str) {\n  for (let i = 0; i < str.length / 2; i++) {\n    if (str[i] !== str[str.length - 1 - i]) return false;\n  }\n  return true;\n}",
+  "hints": [
+    {
+      "order": 1,
+      "text": "Use a loop from 0 to str.length / 2"
+    },
+    {
+      "order": 2,
+      "text": "Compare characters from start and end"
+    }
+  ],
+  "tests": [
+    {
+      "name": "'racecar'",
+      "args": [
+        "racecar"
+      ],
+      "expected": true
+    },
+    {
+      "name": "'hello'",
+      "args": [
+        "hello"
+      ],
+      "expected": false
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "6807a13909369d07a2c66dff"
+  },
+  "title": "Find Max",
+  "description": "Return the largest number in the array (no Math.max).",
+  "template": "function findMax(arr) {\n  // your code here\n}",
+  "solution": "function findMax(arr) {\n  let max = arr[0];\n  for (let i = 1; i < arr.length; i++) {\n    if (arr[i] > max) max = arr[i];\n  }\n  return max;\n}",
+  "hints": [
+    {
+      "order": 1,
+      "text": "Initialize max to the first element"
+    },
+    {
+      "order": 2,
+      "text": "Loop through and compare"
+    }
+  ],
+  "tests": [
+    {
+      "name": "[1,5,3]",
+      "args": [
+        [
+          1,
+          5,
+          3
+        ]
+      ],
+      "expected": 5
+    },
+    {
+      "name": "[9,2,0,-1]",
+      "args": [
+        [
+          9,
+          2,
+          0,
+          -1
+        ]
+      ],
+      "expected": 9
+    }
+  ]
+}]
