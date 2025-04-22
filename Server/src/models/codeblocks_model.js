@@ -25,6 +25,13 @@ const codeBlockSchema = new Schema(
         order: Number,
       },
     ],
+    tests: [
+      {
+        name: String,
+        args: [Schema.Types.Mixed],
+        expected: Schema.Types.Mixed,
+      },
+    ],
   },
   {
     collection: "codeblocks",

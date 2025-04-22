@@ -1,4 +1,5 @@
 import { Server } from "socket.io";
+import runInSandbox from "./sandbox_running_logic.js";
 
 const codeBlockRooms = {};
 
@@ -16,6 +17,7 @@ const setupSocket = (server) => {
     handleSolved(io, socket);
     handleUnsolved(io, socket);
     handleRequestHint(io, socket);
+    handleRunCode(io, socket);
     handleDisconnecting(io, socket);
   });
 };
@@ -23,7 +25,7 @@ const setupSocket = (server) => {
 const handleJoinCodeBlock = (io, socket) => {
   socket.on(
     "joinCodeBlock",
-    async ({ codeBlockId, initialCode = "", hints = [] }) => {
+    async ({ codeBlockId, initialCode = "", hints = [], tests = [] }) => {
       socket.join(codeBlockId);
 
       const room = codeBlockRooms[codeBlockId];
@@ -36,6 +38,7 @@ const handleJoinCodeBlock = (io, socket) => {
           solved: false,
           revealedHints: 0,
           hints: hints,
+          tests: tests,
         };
         socket.emit("setRole", "mentor");
       } else if (room.mentor) {
@@ -97,6 +100,31 @@ const handleRequestHint = (io, socket) => {
         order: nextHint.order,
         text: nextHint.text,
       });
+    }
+  });
+};
+
+const handleRunCode = (io, socket) => {
+  socket.on("runCode", ({ codeBlockId }) => {
+    const room = codeBlockRooms[codeBlockId];
+    if (!room) return;
+
+    const code = room.code;
+    const { consoleOutput, testResults } = runInSandbox(code, room.tests || []);
+
+    io.to(codeBlockId).emit("runResults", {
+      consoleOutput,
+      testResults,
+    });
+
+    const passedAll =
+      testResults.length > 0 && testResults.every((res) => res.passed);
+    if (passedAll) {
+      room.solved = true;
+      io.to(codeBlockId).emit("blockSolved");
+    } else {
+      room.solved = false;
+      io.to(codeBlockId).emit("blockUnsolved");
     }
   });
 };

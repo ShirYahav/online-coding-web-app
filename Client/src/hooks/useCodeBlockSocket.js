@@ -1,27 +1,58 @@
 import socketService from "@/services/socketService";
-import { useEffect } from "react"
+import { useEffect } from "react";
 
-export const useCodeBlockSocket = (codeBlockId, initialCode, { initialHints = [], onRole, onCode, onCount, onSolved, onUnsolved, onHint, onRedirect }) => {
-    useEffect(() => {
-        onHint([]);
+export const useCodeBlockSocket = ({
+  codeBlockId,
+  initialCode = "",
+  initialHints = [],
+  initialTests = [],
+  setRole,
+  setCode,
+  setStudentCount,
+  setSolved,
+  setShowCelebration,
+  setHints,
+  setRunOutput,
+  setTestResults,
+  navigate,
+}) => {
+  useEffect(() => {
+    socketService.connect();
 
-        socketService.connect();
-        socketService.emit("joinCodeBlock", {
-            codeBlockId,
-            initialCode,
-            hints: initialHints, 
-        });
-        socketService.on("setRole", onRole);
-        socketService.on("codeUpdate", onCode);
-        socketService.on("studentCount", onCount);
-        socketService.on("blockSolved",  () => onSolved(true));
-        socketService.on("blockUnsolved", () => onUnsolved(false));
-        socketService.on("redirectToLobby", onRedirect);
-        socketService.on("hintRevealed", (hint) => {
-            onHint(prev => [...prev, hint]);
-        });
+    socketService.emit("joinCodeBlock", {
+      codeBlockId,
+      initialCode,
+      hints: initialHints,
+      tests: initialTests,
+    });
 
-        return () => socketService.disconnect();
+    socketService.on("setRole", setRole);
+    socketService.on("codeUpdate", setCode);
+    socketService.on("studentCount", setStudentCount);
 
-    }, [codeBlockId, initialCode]);
-}
+    socketService.on("blockSolved", () => {
+      setSolved(true);
+      setShowCelebration(true);
+      setTimeout(() => setShowCelebration(false), 3500);
+    });
+
+    socketService.on("blockUnsolved", () => {
+      setSolved(false);
+    });
+
+    socketService.on("redirectToLobby", () => {
+      navigate("/");
+    });
+
+    socketService.on("hintRevealed", (hint) => {
+      setHints((prev) => [...prev, hint]);
+    });
+
+    socketService.on("runResults", ({ consoleOutput, testResults }) => {
+      setRunOutput(consoleOutput);
+      setTestResults(testResults);
+    });
+
+    return () => socketService.disconnect();
+  }, [codeBlockId, initialCode]);
+};

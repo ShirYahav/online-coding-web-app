@@ -17,14 +17,16 @@ import smileyDog from "../../assets/gifs/smileyDog.gif";
 
 const CodeBlockEditor = () => {
   const { codeBlockId } = useParams();
-  const navigate = useNavigate();
 
-  const [code, setCode] = useState("");
   const [role, setRole] = useState("");
+  const [code, setCode] = useState("");
   const [studentCount, setStudentCount] = useState(0);
   const [solved, setSolved] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
   const [hints, setHints] = useState([]);
+  const [runOutput, setRunOutput] = useState("");
+  const [testResults, setTestResults] = useState([]);
+  const navigate = useNavigate();
 
   const codeBlock = useCodeBlockData(codeBlockId);
 
@@ -34,18 +36,20 @@ const CodeBlockEditor = () => {
     if (codeBlock?.template) setCode(codeBlock.template);
   }, [codeBlock]);
 
-  useCodeBlockSocket(codeBlockId, codeBlock?.template, {
+  useCodeBlockSocket({
+    codeBlockId,
+    initialCode: codeBlock?.template,
     initialHints: codeBlock?.hints,
-    onRole: setRole,
-    onCode: setCode,
-    onCount: setStudentCount,
-    onSolved: setSolved,
-    onUnsolved: setSolved,
-    onHint: setHints,
-    onRedirect: () => {
-      toast("Mentor left, Redirecting back to Lobby ...");
-      navigate("/");
-    },
+    initialTests: codeBlock?.tests,
+    setRole,
+    setCode,
+    setStudentCount,
+    setSolved,
+    setShowCelebration,
+    setHints,
+    setRunOutput,
+    setTestResults,
+    navigate,
   });
 
   const handleCodeChange = (e) => {
@@ -60,8 +64,6 @@ const CodeBlockEditor = () => {
         socketService.emit("solved", { codeBlockId });
       }
       setSolved(true);
-      setShowCelebration(true);
-      setTimeout(() => setShowCelebration(false), 5000);
     } else {
       if (solved) socketService.emit("unsolved", { codeBlockId });
       setSolved(false);
@@ -70,6 +72,10 @@ const CodeBlockEditor = () => {
 
   const requestNextHint = () => {
     socketService.emit("requestHint", { codeBlockId });
+  };
+
+  const runCode = () => {
+    socketService.emit("runCode", { codeBlockId });
   };
 
   return (
@@ -129,27 +135,54 @@ const CodeBlockEditor = () => {
           <Button
             onClick={requestNextHint}
             disabled={role !== "student" || hints.length >= totalHints}
-            className="w-full mb-4 bg-[#1f2335] rounded-sm text-sm text-white cursor-pointer"
+            className="w-full mb-2 bg-[#1f2335] rounded-sm text-sm text-white cursor-pointer"
           >
             Get Hint
           </Button>
 
-          <div className="space-y-2">
-            {hints.map((hint) => (
-              <Collapsible
-                key={hint.order}
-                defaultOpen
-                className="border rounded-sm mb-3"
-              >
-                <CollapsibleTrigger className="px-4 py-2 w-full text-left cursor-pointer">
-                  Hint {hint.order}/{totalHints}
-                </CollapsibleTrigger>
-                <CollapsibleContent className="px-4 py-2 bg-gray-50 text-sm">
-                  {hint.text}
-                </CollapsibleContent>
-              </Collapsible>
-            ))}
-          </div>
+          {hints.map((hint) => (
+            <Collapsible
+              key={hint.order}
+              defaultOpen
+              className="border rounded-sm mb-2"
+            >
+              <CollapsibleTrigger className="px-4 py-2 w-full text-left text-sm font-bold cursor-pointer">
+                Hint {hint.order}/{totalHints}
+              </CollapsibleTrigger>
+              <CollapsibleContent className="px-4 py-2 bg-gray-50 text-sm">
+                {hint.text}
+              </CollapsibleContent>
+            </Collapsible>
+          ))}
+
+          <Button
+            onClick={runCode}
+            className="w-full mt-4 bg-[#bb9af7] text-white rounded-sm text-sm cursor-pointer hover:bg-[#1f2335]"
+          >
+            Run ▶
+          </Button>
+          {runOutput && (
+            <div className="mt-4 mb-4 bg-[#1f2335] text-white p-2 rounded-sm text-sm">
+              <strong>Console Output:</strong>
+              <pre>{runOutput}</pre>
+            </div>
+          )}
+
+          {testResults?.length > 0 && (
+            <div className="space-y-2 mb-5">
+              <p className="text-[#1f2335] mt-4 font-bold">Test Results:</p>
+              {testResults.map((res, i) => (
+                <div
+                  key={i}
+                  className={`p-2 rounded-sm text-sm ${
+                    res.passed ? "bg-green-200" : "bg-red-200"
+                  }`}
+                >
+                  {res.name}: {res.passed ? "Passed" : "Failed"}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </>
