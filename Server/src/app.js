@@ -13,9 +13,14 @@ dal.connect();
 const app = express();
 const server = http.createServer(app);
 
+const allowedOrigins = [
+  "https://online-coding-web-app-client-hnla.onrender.com",
+  "http://localhost:5173"
+];
+
 app.use(
   cors({
-    origin: "https://online-coding-web-app-client-hnla.onrender.com",
+    origin: allowedOrigins,
     methods: ["GET", "POST"],
     credentials: true,
   })

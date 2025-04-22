@@ -20,7 +20,7 @@ const CodeBlocksList = () => {
   }, []);
 
   return (
-    <div className="codeBlocks grid grid-cols-2 gap-10">
+    <div className="codeBlocks grid grid-cols-1 sm:grid-cols-2 gap-6 px-4">
       {codeBlocks.map((c) => (
         <CodeBlockCard key={c._id} codeBlock={c} />
       ))}

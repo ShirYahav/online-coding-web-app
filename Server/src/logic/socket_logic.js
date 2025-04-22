@@ -15,39 +15,45 @@ const setupSocket = (server) => {
     handleCodeChange(socket);
     handleSolved(io, socket);
     handleUnsolved(io, socket);
+    handleRequestHint(io, socket);
     handleDisconnecting(io, socket);
   });
 };
 
 const handleJoinCodeBlock = (io, socket) => {
-  socket.on("joinCodeBlock", ({ codeBlockId, initialCode = "" }) => {
-    socket.join(codeBlockId);
+  socket.on(
+    "joinCodeBlock",
+    async ({ codeBlockId, initialCode = "", hints = [] }) => {
+      socket.join(codeBlockId);
 
-    const room = codeBlockRooms[codeBlockId];
+      const room = codeBlockRooms[codeBlockId];
 
-    if (!room) {
-      codeBlockRooms[codeBlockId] = {
-        mentor: socket.id,
-        students: [],
-        code: initialCode,
-        solved: false,
-      };
-      socket.emit("setRole", "mentor");
-    } else if (room.mentor) {
-      room.students.push(socket.id);
-      socket.emit("setRole", "student");
-      socket.emit("codeUpdate", room.code);
-      if (room.solved) socket.emit("blockSolved");
-    } else {
-      socket.emit("redirectToLobby");
-      return;
+      if (!room) {
+        codeBlockRooms[codeBlockId] = {
+          mentor: socket.id,
+          students: [],
+          code: initialCode,
+          solved: false,
+          revealedHints: 0,
+          hints: hints,
+        };
+        socket.emit("setRole", "mentor");
+      } else if (room.mentor) {
+        room.students.push(socket.id);
+        socket.emit("setRole", "student");
+        socket.emit("codeUpdate", room.code);
+        if (room.solved) socket.emit("blockSolved");
+      } else {
+        socket.emit("redirectToLobby");
+        return;
+      }
+
+      io.to(codeBlockId).emit(
+        "studentCount",
+        codeBlockRooms[codeBlockId].students.length
+      );
     }
-
-    io.to(codeBlockId).emit(
-      "studentCount",
-      codeBlockRooms[codeBlockId].students.length
-    );
-  });
+  );
 };
 
 const handleCodeChange = (socket) => {
@@ -74,6 +80,24 @@ const handleUnsolved = (io, socket) => {
     if (!room || !room.solved) return;
     room.solved = false;
     io.to(codeBlockId).emit("blockUnsolved");
+  });
+};
+
+const handleRequestHint = (io, socket) => {
+  socket.on("requestHint", ({ codeBlockId }) => {
+    const room = codeBlockRooms[codeBlockId];
+
+    if (!room) return;
+
+    if (room.hints && room.revealedHints < room.hints.length) {
+      const nextHint = room.hints[room.revealedHints];
+      room.revealedHints++;
+
+      io.to(codeBlockId).emit("hintRevealed", {
+        order: nextHint.order,
+        text: nextHint.text,
+      });
+    }
   });
 };
 

@@ -2,27 +2,33 @@ import { Schema, model } from "mongoose";
 
 const codeBlockSchema = new Schema(
   {
-    title: { 
-        type: String, 
-        required: true, 
-        unique: true
+    title: {
+      type: String,
+      required: true,
+      unique: true,
     },
-    description: { 
-        type: String, 
-        default: "" 
+    description: {
+      type: String,
+      default: "",
     },
-    template: { 
-        type: String, 
-        required: true 
+    template: {
+      type: String,
+      required: true,
     },
-    solution: { 
-        type: String, 
-        required: true, 
+    solution: {
+      type: String,
+      required: true,
     },
+    hints: [
+      {
+        text: String,
+        order: Number,
+      },
+    ],
   },
-  { 
-    collection: "codeblocks"
-  } 
+  {
+    collection: "codeblocks",
+  }
 );
 
 const CodeBlock = model("CodeBlock", codeBlockSchema);
