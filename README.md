@@ -154,6 +154,7 @@ cd Client
 npm start
 ```
 The React app will run at: http://localhost:5173
+
 ---
 
 ## Usage
