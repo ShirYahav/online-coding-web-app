@@ -47,7 +47,7 @@
 
 ## Tech Stack
 
-- **Client:** React, React Router, Tailwind CSS, shadcn/ui
+- **Client:** React, React Router, Tailwind CSS, shadcn
 - **Server:** Node.js, Express, Socket.IO
 - **Database:** MongoDB (via Mongoose)
 - **Deployment:** Docker (for local dev), Render (for live hosting)
