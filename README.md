@@ -23,13 +23,13 @@
 ## Demo & Screenshots
 
 - **Live App:**  
-  [https://online-coding-web-app.onrender.com](https://online-coding-web-app.onrender.com)
+  [https://online-coding-web-app-client-hnla.onrender.com/codeBlocks](https://online-coding-web-app-client-hnla.onrender.com/codeBlocks)
 
 - **Lobby Page:**  
-  ![Lobby Page](./assets/lobby-screenshot.png)
+  ![Lobby Page](https://github.com/user-attachments/assets/d9fe696a-49cf-423a-a18d-cd04fae6c0e3)
 
 - **Demo Example:**  
-  [![Watch the demo](https://img.youtube.com/vi/YOUR_VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=YOUR_VIDEO_ID)  
+  [![Click to watch the demo](https://img.shields.io/badge/Watch-Demo%20Video-blue?style=for-the-badge&logo=github)](https://github.com/user-attachments/assets/25f99701-ee8f-4282-835e-66bb4fc1c71b)  
   _Click to watch the full walkthrough._
 
 ---
@@ -90,6 +90,7 @@
 ├── .gitignore
 └── docker-compose.yml
 ```
+
 ---
 
 ## Environment Variables
@@ -98,69 +99,84 @@ Create a `.env` file in **both** the `Server` and `Client` directories **before 
 
 ### 📁 Server/.env
 
-| Variable       | Value                                      |
-|----------------|--------------------------------------------|
-| `NODE_ENV`     | development                                |
-| `MONGO_DB_URI` | mongodb://localhost:27017/moveoapp         |
+| Variable       | Value                              |
+| -------------- | ---------------------------------- |
+| `NODE_ENV`     | development                        |
+| `MONGO_DB_URI` | mongodb://localhost:27017/moveoapp |
 
 ### 📁 Client/.env
 
-| Variable         | Value                      |
-|------------------|----------------------------|
-| `VITE_API_ROOT`  | http://localhost:3001/     |
+| Variable        | Value                  |
+| --------------- | ---------------------- |
+| `VITE_API_ROOT` | http://localhost:3001/ |
 
 ---
 
 ## Installation & Database Seeding
 
 ### Step 1: Clone & install
+
 ```
 git clone https://github.com/ShirYahav/online-coding-web-app.git
 cd online-coding-web-app
 ```
 
 - **Client:**
+
 ```
 cd Client
 npm install
 ```
 
 - **Server:**
+
 ```
 cd ../Server
 npm install
 ```
 
 ### Step 2: Start MongoDB (with Docker)
-*Make sure your Server/.env has:*
+
+_Make sure your Server/.env has:_
+
 ```
 MONGO_DB_URI=mongodb://localhost:27017/moveoapp
 ```
+
 From the root of the project (where docker-compose.yml lives), run:
+
 ```
 docker-compose up -d mongo
 ```
+
 This will launch MongoDB on localhost:27017
 
 ### Step 3: Seed the database
+
 ```
 cd Server
 npm run seed
 ```
+
 This reads mongo-seed/moveoapp/codeblocks.json and populates the moveoapp database.
 
 ### Step 4: Start the Server
+
 ```
 npm run dev
 ```
+
 The Express API will run at: http://localhost:3001
 
 ### Step 5: Start the Client
+
 Open a new terminal:
+
 ```
 cd Client
 npm start
 ```
+
 The React app will run at: http://localhost:5173
 
 ---
@@ -172,7 +188,7 @@ The React app will run at: http://localhost:5173
 
 - **Request hints:**  
   Click **Get Hint** to reveal the next hint. You can also click a hint’s header to collapse it again.  
-  *(Note: Mentors cannot request hints.)*
+  _(Note: Mentors cannot request hints.)_
 
 - **Run your code:**  
   Click **Run** to execute your code in the sandbox. It will automatically check against the exercise’s tests.  
