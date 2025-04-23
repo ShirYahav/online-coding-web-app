@@ -29,8 +29,7 @@
   ![Lobby Page](https://github.com/user-attachments/assets/d9fe696a-49cf-423a-a18d-cd04fae6c0e3)
 
 - **Demo Example:**  
-  [![Click to watch the demo](https://img.shields.io/badge/Watch-Demo%20Video-blue?style=for-the-badge&logo=github)](https://github.com/user-attachments/assets/25f99701-ee8f-4282-835e-66bb4fc1c71b)  
-  _Click to watch the full walkthrough._
+https://github.com/user-attachments/assets/580fe47a-aef1-475a-bf0a-a80d108c8c5a
 
 ---
 
