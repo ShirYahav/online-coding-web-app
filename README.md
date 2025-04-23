@@ -174,7 +174,7 @@ Open a new terminal:
 
 ```
 cd Client
-npm start
+npm run dev
 ```
 
 The React app will run at: http://localhost:5173
