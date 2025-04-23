@@ -22,7 +22,15 @@
 
 ## Demo & Screenshots
 
-- **Live App:** 
+- **Live App:**  
+  [https://online-coding-web-app.onrender.com](https://online-coding-web-app.onrender.com)
+
+- **Lobby Page:**  
+  ![Lobby Page](./assets/lobby-screenshot.png)
+
+- **Demo Example:**  
+  [![Watch the demo](https://img.youtube.com/vi/YOUR_VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=YOUR_VIDEO_ID)  
+  _Click to watch the full walkthrough._
 
 ---
 
