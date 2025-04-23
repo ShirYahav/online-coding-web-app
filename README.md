@@ -54,7 +54,7 @@
 
 ---
 
-## 🗂️ Architecture & Folder Structure
+## Architecture & Folder Structure
 
 ```
 ├── Client
@@ -128,7 +128,7 @@ npm install
 ```
 MONGO_DB_URI=mongodb://localhost:27017/moveoapp
 ```
-- From the root of the project (where docker-compose.yml lives), run:
+From the root of the project (where docker-compose.yml lives), run:
 ```
 docker-compose up -d mongo
 ```
@@ -148,13 +148,12 @@ npm run dev
 The Express API will run at: http://localhost:3001
 
 ### Step 5: Start the Client
-- Open a new terminal:
+Open a new terminal:
 ```
 cd Client
 npm start
 ```
-The React app will run at: http://localhost:3000
-
+The React app will run at: http://localhost:5173
 ---
 
 ## Usage
@@ -168,7 +167,7 @@ The React app will run at: http://localhost:3000
 
 - **Run your code:**  
   Click **Run** to execute your code in the sandbox. It will automatically check against the exercise’s tests.  
-  ✅ Passing all tests triggers a big smiley celebration!
+  Passing all tests triggers a big smiley celebration!
 
 - **Role indicator:**  
   Your current role (**mentor** or **student**) is displayed in the top-right corner of the screen.
