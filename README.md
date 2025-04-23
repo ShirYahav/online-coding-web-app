@@ -23,7 +23,7 @@
 ## Demo & Screenshots
 
 - **Live App:**  
-  [https://online-coding-web-app-client-hnla.onrender.com/codeBlocks](https://online-coding-web-app-client-hnla.onrender.com/codeBlocks)
+  [https://online-coding-web-app-client-hnla.onrender.com/](https://online-coding-web-app-client-hnla.onrender.com/)
 
 - **Lobby Page:**  
   ![Lobby Page](https://github.com/user-attachments/assets/d9fe696a-49cf-423a-a18d-cd04fae6c0e3)
